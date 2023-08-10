@@ -1,8 +1,7 @@
-from loader import dp, db, bot
+from loader import dp, bot
 from aiogram import types
-from aiogram.types import CallbackQuery, InputMediaVideo
+from aiogram.types import InputMediaVideo
 from keyboards.inlines import contactus_keyboard, buy_keyboard, catalog_keyboard
-# from keyboards.inlines.callback_data import navigation_items_callback, contact_callback
 from pathlib import Path
 from aiogram.utils.markdown import hbold, hlink
 from config import video_path_intro
@@ -61,38 +60,3 @@ async def answer_instock_command(message: types.Message):
      await message.answer(text=f'В данный момент в наличии устройств нет. '
                           f'Вы можете посмотреть доступные устройства для заказа, отправив команду /catalog')
 
-# @dp.message_handler(text=['Помощь','Помоги', 'помощь','помоги']) 
-# @dp.message_handler(commands='help')
-# async def answer_help_command(message: types.Message):
-#     await message.answer(text=f'Сейчас всё решим!'
-#                          f'\nВыбери одну из команд:'
-#                         #  f'\nредис'
-#                         #  f'\nпомидоры'
-#                         #  f'\nкапуста'
-#                         #  f'\n/add'
-#                          f'\n/start - приветствие'
-#                          f'\n/item - ассортимент'
-#                          f'\n/help - доступные команды'
-#                         )
-    
-# @dp.message_handler(content_types=['contact'])
-# async def answer_contact_command(message: types.Message):
-#     if message.contact.user_id == message.from_user.id:
-#         await message.answer(text='Регистрация прошла успешно!')
-#         db.add_user(int(message.from_user.id), str(message.contact.phone_number))
-#     else:
-#         await message.answer(text='Увы('
-#                              f'\nПроверьте номер телефона и попробуйте ещё раз.')
-
-# @dp.callback_query_handler(contact_callback.filter(for_data = 'contact'))
-# async def open_helper_chat(call: CallbackQuery):
-#     await print(f'https://telegra.ph/MiTech-buy-12-09')
-#     pass
-
-# @dp.callback_query_handler(basket_callback.filter(action='del_basket'))
-# async def del_basket(call: CallbackQuery):
-#     db.update_basket(id=call.from_user.id, user_basket='')
-#     await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
-#     await bot.answer_callback_querty(callback_querty_id=call.id,
-#                                      text='Корзина успешно очищена.',
-#                                      show_alert=True)
