@@ -18,7 +18,6 @@ except sqlite3.OperationalError as e:
     logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
     logger.debug(e)
 except Exception as e:
-    print(e)
     logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
     logger.debug(e)
 

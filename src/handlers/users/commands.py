@@ -1,7 +1,7 @@
 from loader import dp, bot
 from aiogram import types
 from aiogram.types import InputMediaVideo
-from keyboards.inlines import contactus_keyboard, buy_keyboard, catalog_keyboard
+from keyboards.inline import contactus_keyboard, buy_keyboard, catalog_keyboard
 from pathlib import Path
 from aiogram.utils.markdown import hbold, hlink
 from config import video_path_intro
@@ -21,7 +21,8 @@ async def answer_start_command(message: types.Message):
                                f'\n/buy - Офоромления заказа\n'
                                f'\n\nЕсли вы хотите модель которой нет в каталоге, напишите администраторам они ответят на все вопросы'
                                f'\n⬇️⬇️⬇️',
-                               reply_markup=contactus_keyboard # ссылка телеграмм на консультантов
+                               reply_markup=contactus_keyboard, # ссылка телеграмм на консультантов
+                               disable_web_page_preview=True
                         )
      await bot.send_video(chat_id=message.chat.id, video=video)
     
@@ -43,9 +44,9 @@ async def answer_buy_command(message: types.Message):
                                f'\n\n▶️ Упаковываем устройство и отправляем СДЭКом по РФ и странам СНГ.'
                                f'\n\n{hbold("Наш адрес")}'
                                f'\nг. Химки, ул. Ленинградская 1Д, офис 20',
-                               reply_markup=buy_keyboard)
+                               reply_markup=buy_keyboard) 
 
-@dp.message_handler(text=[])
+@dp.message_handler(text=['Каталог', 'каталог'])
 @dp.message_handler(commands='catalog')
 async def answer_catalog_command(message: types.Message):
      await message.answer(text=f'⚡️ В каталоге {hbold("все цены на ноутбуки")},'
@@ -54,7 +55,6 @@ async def answer_catalog_command(message: types.Message):
                           reply_markup=catalog_keyboard)
      
 
-@dp.message_handler(text=[])
 @dp.message_handler(commands='instock')
 async def answer_instock_command(message: types.Message):
      await message.answer(text=f'В данный момент в наличии устройств нет. '
