@@ -1,1 +1,1 @@
-from .inline import navigation_items_callback, notebooks_keyboard
+from .inline import navigation_items_callback, notebooks_keyboard, smartphones_keyboard, notepads_keyboard, tvs_keyboard, computers_keyboard, screens_keyboard, pstations_keyboard, vcards_keyboard, components_keyboard, accessories_keyboard, forhome_keyboard, back_keyboard
