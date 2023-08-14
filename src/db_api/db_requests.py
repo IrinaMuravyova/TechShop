@@ -46,10 +46,24 @@ class Database:
         sql="""
         CREATE TABLE Items(
         id int NOT NULL,
-        name text,
-        count int,
-        photo_path text,
+        category text, 
+        brand text,
+        model text,
+        parameters text,
+        price int,
+        photo_intro_path text,
         PRIMARY KEY (id)
         );
         """
         self.execute(sql, commit=True)
+
+    def add_item(self, id:int, category: str, brand: str, model: str, parameters: str, price: int = 0, photo_intro_path: str = ''):
+        sql = 'INSERT INTO Items(id, category, brand, model, parameters, price, photo_intro_path) VALUES(?,?,?,?,?,?,?)'
+        item_parameters = (id, category, brand, model, parameters, price, photo_intro_path)
+        self.execute(sql, item_parameters, commit=True)
+
+
+    def select_item_info(self, **kwargs)-> list:
+        sql = 'SELECT * FROM Items WHERE '
+        sql, item_parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, item_parameters, kwargs)    
