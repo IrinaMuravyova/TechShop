@@ -153,7 +153,8 @@ async def answer_catalog_command(call: types.CallbackQuery, state: FSMContext):
 
         # распаковываю первый элемент для вывода данных
         id, category, brand, model, parameters, prices, photo_path = items_in_category[0]
-        
+        await state.update_data({'current_id': id})
+
         # в FSM сохраняю наш пул нужных id
         await state.update_data({'pull_id_of_category': id_of_category})
 
@@ -188,6 +189,7 @@ async def list_catalog_left(call: types.CallbackQuery, state: FSMContext):
 
     # из кнопки достаем текущий id (элемента, который показываем в канале)
     current_item_id = int(call.data.split(':')[-1])
+    await state.update_data({'current_id': current_item_id})
 
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
@@ -221,6 +223,8 @@ async def list_catalog_right(call: types.CallbackQuery, state: FSMContext):
     chat_id = call.message.chat.id
     # из кнопки достаем текущий id (элемента, который показываем в канале)
     current_item_id = int(call.data.split(':')[-1])
+    await state.update_data({'current_id': current_item_id})
+
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
         id, category, brand, model, parameters, prices, photo_path = item_info
@@ -246,15 +250,17 @@ async def list_catalog_right(call: types.CallbackQuery, state: FSMContext):
 async def list_catalog(call: types.CallbackQuery, state: FSMContext):
     
     chat_id = call.message.chat.id  
-
+    print(call.data)
     # выгружаем словарь из FSM
     data = await state.get_data()
     # выгружаем список id из FSM
     all_items = data.get('pull_id_of_category')
-    print(data)
+    # print(data)
+
+    current_item_id=data.get('current_id')
+    # print(current_item_id)
 
     id_right = -1 if current_item_id==all_items[-1] else all_items[all_items.index(current_item_id)+1]
-    current_item_id=data.get('current_id', 3)
     items_in_category = db.select_item_info(id=current_item_id)
     _, category, brand, model, parameters, prices, photo_path = items_in_category
     photo_path=Path(*photo_path_Mijia_DC_Inverter.split('/'))
@@ -269,7 +275,7 @@ async def list_catalog(call: types.CallbackQuery, state: FSMContext):
                                 f'\n{hbold("Характеристики и цена:")}'
                                 f'\n{parameters}'
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}')
-    # photo = InputFile(path_or_bytesio=photo_path) 
+    photo = InputFile(path_or_bytesio=photo_path) 
     await bot.send_photo(chat_id=chat_id,
                         photo=photo,
                         caption=f'\n{hbold(category)}{hbold(" » ")}{hbold(brand)}'   
@@ -278,7 +284,7 @@ async def list_catalog(call: types.CallbackQuery, state: FSMContext):
                                 f'\n{hbold("Характеристики и цена:")}'
                                 f'\n{parameters}'
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
-                                f'\n\n                        cтраница: {current_item_id} / {len(items_in_category)}', #исправить общее количество
+                                f'\n\n                        cтраница: {current_item_id} / {len(all_items)}', #исправить общее количество
                         reply_markup=get_item_inline_keyboard(id_left=all_items[all_items.index(current_item_id)-1],current_id=1, id_right=id_right))
 
 # выход из просмотра всех товаров категории
