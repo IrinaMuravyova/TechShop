@@ -31,3 +31,6 @@ except Exception as e:
     logger.debug(e)
 
     
+# db.add_item(id=1, category = 'Для дома', brand = 'Xiaomi', model = 'Mijia DC Inverter Tower Fan White', parameters='напольный, радиальный 22 Вт, 34.6 дБ', price = 9000, photo_intro_path='db_api/photo/Mijia_DC_Inv_Tow_Fan.jpg')
+# db.add_item(id=3, category = 'Для дома', brand = 'Xiaomi', model = 'Mijia DC Inverter Tower Fan White', parameters='напольный, радиальный 22 Вт, 34.6 дБ', price = 10000, photo_intro_path='db_api/photo/Mijia_DC_Inv_Tow_Fan.jpg')
+# db.add_item(id=2, category = 'Ноутбуки', brand = 'Xiaomi', model = 'Book Pro 14 2022 OLED', parameters='R5 6600H Radeon 660M 14" 2.8K 90Hz OLED 16GB / SSD 512GB', price = 81000,  photo_intro_path='db_api/database/photo/XiaomiBookPro14.jpg')

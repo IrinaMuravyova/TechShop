@@ -12,11 +12,11 @@ xiaomi_fh_keyboard = InlineKeyboardMarkup(
                                   )) ,
             InlineKeyboardButton(text= 'Все устройства',
                                  callback_data=navigation_items_callback.new(
-                                    for_data = 'Все_устройства'
+                                    for_data = 'Все_устройства_fh'
                                   )) 
         ],
         [
-           InlineKeyboardButton(text= '<< Назад',
+           InlineKeyboardButton(text= '« Назад',
                                  callback_data=navigation_items_callback.new(
                                     for_data = 'back_to_for_home'
                                   ))   

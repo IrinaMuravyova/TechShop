@@ -62,8 +62,21 @@ class Database:
         item_parameters = (id, category, brand, model, parameters, price, photo_intro_path)
         self.execute(sql, item_parameters, commit=True)
 
-
     def select_item_info(self, **kwargs)-> list:
         sql = 'SELECT * FROM Items WHERE '
-        sql, item_parameters = self.format_args(sql, kwargs)
-        return self.execute(sql, item_parameters, kwargs)    
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchone=True) 
+
+    def select_items_info(self, **kwargs)-> list:
+        sql = 'SELECT * FROM Items WHERE '
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchall=True)    
+
+    def select_all_items(self):
+        sql = 'SELECT * FROM Items WHERE '
+        return self.execute(sql, fetchall=True)
+    
+    # def get_items_count(self, **kwargs) -> int: # возвращает общее количество всех товаров
+    #     sql = 'SELECT * FROM Items'
+    #     sql, item_parameters = self.format_args(sql, kwargs)
+    #     return len(self.execute(sql, item_parameters, kwargs, fetchall=True))

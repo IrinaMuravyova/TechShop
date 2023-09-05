@@ -138,7 +138,7 @@ notebooks_keyboard = InlineKeyboardMarkup(
                                     )
             ],
             [
-                InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(
+                InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(
                                          for_data = 'back_to_catalog')   
                                     )
             ]
@@ -180,7 +180,7 @@ smartphones_keyboard = InlineKeyboardMarkup(
             ))            
         ], 
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new( #todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new( #todo
                 for_data='back_to_catalog'
             ))
         ]     
@@ -198,7 +198,7 @@ notepads_keyboard = InlineKeyboardMarkup(
             ))
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new( #todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new( #todo
                 for_data='back_to_catalog'
             ))            
         ]
@@ -218,7 +218,7 @@ tvs_keyboard = InlineKeyboardMarkup(
                                  ))
         ],
         [
-            InlineKeyboardButton(text='<< Назад', 
+            InlineKeyboardButton(text='« Назад', 
                                  callback_data=navigation_items_callback.new(
                                      for_data='back_to_catalog'
                                  ))            
@@ -245,7 +245,7 @@ computers_keyboard = InlineKeyboardMarkup(
                                  ))            
         ],
         [
-            InlineKeyboardButton(text='<< Назад', 
+            InlineKeyboardButton(text='« Назад', 
                                  callback_data=navigation_items_callback.new(
                                      for_data='back_to_catalog'
                                  ))            
@@ -277,7 +277,7 @@ screens_keyboard = InlineKeyboardMarkup(
             ))            
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new( #todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new( #todo
                 for_data='back_to_catalog'
             ))            
         ]
@@ -292,7 +292,7 @@ pstations_keyboard = InlineKeyboardMarkup(
             ))
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'back_to_catalog'
             ))
         ]
@@ -307,7 +307,7 @@ vcards_keyboard = InlineKeyboardMarkup(
             ))            
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'back_to_catalog'
             ))
         ]
@@ -330,7 +330,7 @@ components_keyboard = InlineKeyboardMarkup(
             ))
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'back_to_catalog'
             ))
         ]
@@ -354,7 +354,7 @@ accessories_keyboard = InlineKeyboardMarkup(
             ))            
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'back_to_catalog'
             ))
         ]
@@ -369,7 +369,7 @@ forhome_keyboard = InlineKeyboardMarkup(
             ))            
         ],
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'back_to_catalog'
             ))
         ]        
@@ -379,7 +379,7 @@ forhome_keyboard = InlineKeyboardMarkup(
 back_keyboard = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton(text='<< Назад', callback_data=navigation_items_callback.new(#todo
+            InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
                 for_data = 'ASUS'
             ))
         ]        
