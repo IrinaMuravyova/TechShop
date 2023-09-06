@@ -10,13 +10,11 @@ from config import photo_path_Mijia_DC_Inverter
 from aiogram.dispatcher import FSMContext
 from states import ShowStates
 
-# возврат в основной каталог
+# возврат в основной каталог из просмотра всех товаров по кнопки "Все устройства"
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_catalog'))
-@dp.callback_query_handler(list_catalog_callback.filter(action='back_to_catalog'))
 async def back_to_catalog(call: types.CallbackQuery):
-    await bot.edit_message_text(text='Выберите категорию устройств',
+    await bot.send_message(text='Выберите категорию устройств',
                                 chat_id=call.message.chat.id,
-                                message_id=call.message.message_id,
                                 reply_markup=catalog_keyboard)
 
     
@@ -41,13 +39,8 @@ async def finished_it(call: types.CallbackQuery):
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='buy'))
 async def buy_items(call: types.CallbackQuery, state: FSMContext):
 
-    for_data = call.data.split(':')[-1]
-
     chat_id = call.message.chat.id
     message_id = call.message.message_id
-    text = f'Выберите производителя устройства\n-----'
-    text_back = f'Выберите категорию устройств\n-----'
-
 
     await bot.edit_message_text(text='Ваша корзина пуста.',  #дописать проверку на пустую корзину
                                 chat_id=chat_id, 
@@ -71,20 +64,20 @@ async def list_catalog_left(call: types.CallbackQuery, state: FSMContext):
 
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
-        id, category, brand, model, parameters, prices, photo_path = item_info
+        _, category_id, brand_id, model_id, parameters, prices = item_info
         photo_path=Path(*photo_path_Mijia_DC_Inverter.split('/'))
         photo = InputFile(path_or_bytesio=photo_path) 
 
         id_left = -1 if current_item_id==all_items[0] else all_items[all_items.index(current_item_id)-1]
 
         await bot.edit_message_media(media=InputMediaPhoto(media=photo,
-                                                        caption=f'\n{hbold(category)}{hbold(" » ")}{hbold(brand)}'   
-                                                            f'\nМодель: {hbold(model)}'
+                                                        caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
+                                                            f'\nМодель: {hbold(db.get_model_name(id=model_id)[0])}'
                                                             f'\n{hbold("-----")}'
                                                             f'\n{hbold("Характеристики и цена:")}'
                                                             f'\n{parameters}'
                                                             f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
-                                                            f'\n\n                        cтраница: {all_items.index(current_item_id)+1} / {len(all_items)}'), #исправить общее количество),
+                                                            f'\n\n                        cтраница: {all_items.index(current_item_id)+1} / {len(all_items)}'),
                                     chat_id=chat_id,
                                     message_id = call.message.message_id,
                                     reply_markup=get_item_inline_keyboard(id_left=id_left, 
@@ -106,18 +99,18 @@ async def list_catalog_right(call: types.CallbackQuery, state: FSMContext):
 
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
-        id, category, brand, model, parameters, prices, photo_path = item_info
+        _, category_id, brand_id, model_id, parameters, prices = item_info
         photo_path=Path(*photo_path_Mijia_DC_Inverter.split('/'))
         photo = InputFile(path_or_bytesio=photo_path) 
         id_right = -1 if current_item_id==all_items[-1] else all_items[all_items.index(current_item_id)+1]
         await bot.edit_message_media(media=InputMediaPhoto(media=photo,
-                                                        caption=f'\n{hbold(category)}{hbold(" » ")}{hbold(brand)}'   
-                                                            f'\nМодель: {hbold(model)}'
+                                                        caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
+                                                            f'\nМодель: {hbold(db.get_model_name(id=model_id)[0])}'
                                                             f'\n{hbold("-----")}'
                                                             f'\n{hbold("Характеристики и цена:")}'
                                                             f'\n{parameters}'
                                                             f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
-                                                            f'\n\n                        cтраница: {all_items.index(current_item_id)+1} / {len(all_items)}'), #исправить общее количество),
+                                                            f'\n\n                        cтраница: {all_items.index(current_item_id)+1} / {len(all_items)}'),
                                     chat_id=chat_id,
                                     message_id = call.message.message_id,
                                     reply_markup=get_item_inline_keyboard(id_left=all_items[all_items.index(current_item_id)-1], 
@@ -129,40 +122,41 @@ async def list_catalog_right(call: types.CallbackQuery, state: FSMContext):
 async def list_catalog(call: types.CallbackQuery, state: FSMContext):
     
     chat_id = call.message.chat.id  
-    print(call.data)
+
     # выгружаем словарь из FSM
     data = await state.get_data()
+
     # выгружаем список id из FSM
     all_items = data.get('pull_id_of_category')
-    # print(data)
-
     current_item_id=data.get('current_id')
-    # print(current_item_id)
 
     id_right = -1 if current_item_id==all_items[-1] else all_items[all_items.index(current_item_id)+1]
     items_in_category = db.select_item_info(id=current_item_id)
-    _, category, brand, model, parameters, prices, photo_path = items_in_category
-    photo_path=Path(*photo_path_Mijia_DC_Inverter.split('/'))
-    photo = InputFile(path_or_bytesio=photo_path) 
+    _, category_id, brand_id, model_id, parameters, prices = items_in_category
+
+    photo = Path(db.get_photo_path(id=brand_id)[0])
+    photo = InputFile(path_or_bytesio=photo) 
     
     await bot.delete_message(chat_id=chat_id, message_id=call.message.message_id)
     await bot.send_photo(chat_id=chat_id,
                         photo=photo,
-                        caption=f'\n{hbold(category)}{hbold(" » ")}{hbold(brand)}'   
-                                f'\nМодель: {hbold(model)}'
+                        caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
+                                f'\nМодель: {hbold(db.get_model_name(id=model_id)[0])}'
                                 f'\n{hbold("-----")}'
                                 f'\n{hbold("Характеристики и цена:")}'
                                 f'\n{parameters}'
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}')
-    photo = InputFile(path_or_bytesio=photo_path) 
+    
+    photo = Path(db.get_photo_path(id=brand_id)[0])
+    photo = InputFile(path_or_bytesio=photo) 
     await bot.send_photo(chat_id=chat_id,
                         photo=photo,
-                        caption=f'\n{hbold(category)}{hbold(" » ")}{hbold(brand)}'   
-                                f'\nМодель: {hbold(model)}'
+                        caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
+                                f'\nМодель: {hbold(db.get_model_name(id=model_id)[0])}'
                                 f'\n{hbold("-----")}'
                                 f'\n{hbold("Характеристики и цена:")}'
                                 f'\n{parameters}'
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
-                                f'\n\n                        cтраница: {current_item_id} / {len(all_items)}', #исправить общее количество
+                                f'\n\n                        cтраница: {current_item_id} / {len(all_items)}', 
                         reply_markup=get_item_inline_keyboard(id_left=all_items[all_items.index(current_item_id)-1],current_id=1, id_right=id_right))
     

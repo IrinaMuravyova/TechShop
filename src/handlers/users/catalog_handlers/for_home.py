@@ -101,14 +101,11 @@ async def mijia_inventor(call: types.CallbackQuery):
                                 )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_for_home'))
-async def back_for_home(call: types.CallbackQuery, state: FSMContext):
-
-    for_data = call.data.split(':')[-1]
+async def back_for_home(call: types.CallbackQuery):
 
     chat_id = call.message.chat.id
     message_id = call.message.message_id
     text = f'Выберите производителя устройства\n-----'
-    text_back = f'Выберите категорию устройств\n-----'
 
     await bot.edit_message_text(text=text+f'\n{hbold("Для дома")}', 
                                 chat_id=chat_id, 
@@ -117,14 +114,11 @@ async def back_for_home(call: types.CallbackQuery, state: FSMContext):
                                 )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Все_устройства'))
-async def all_devices(call: types.CallbackQuery, state: FSMContext):
-
-    for_data = call.data.split(':')[-1]
+async def all_devices(call: types.CallbackQuery):
 
     chat_id = call.message.chat.id
     message_id = call.message.message_id
     text = f'Выберите производителя устройства\n-----'
-    text_back = f'Выберите категорию устройств\n-----'
 
     await bot.edit_message_text(text=text+f'\n{hbold("Для дома » Xiaomi")}', 
                                 chat_id=chat_id, 
