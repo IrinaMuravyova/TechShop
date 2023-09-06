@@ -99,7 +99,7 @@ notebooks_keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(text='Xiaomi', callback_data=navigation_items_callback.new(
-                                         for_data = 'Xiaomi')                                    
+                                         for_data = 'Xiaominb')                                    
                                     ),
                 InlineKeyboardButton(text='Xiaomi Redmi', callback_data=navigation_items_callback.new(
                                          for_data = 'Xiaomi_Redmi')   

@@ -28,7 +28,7 @@ def get_item_inline_keyboard(id_left: int, current_id: int, id_right: int) -> In
                                     id=-1)),
                              InlineKeyboardButton(text='Завершить',
                                    callback_data=list_catalog_callback.new( 
-                                    action = 'finished_show_items',
+                                    action = 'finished',
                                     id=-1))
                             )
 

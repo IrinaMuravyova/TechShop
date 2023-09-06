@@ -1,29 +1,45 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from keyboards.inline.callback_data import navigation_items_callback
+from keyboards.inline.callback_data import navigation_items_callback, configs_list_callback
 
 from loader import db
+
 
 xiaominb_keyboard = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton(text= 'Xiaomi Book Pro 14 2022 OLED',
-                                 callback_data=navigation_items_callback.new(
-                                    for_data = 'Xiaomi_Book_Pro_14_2022_OLED'
+            InlineKeyboardButton(text= db.get_model_name(id=1)[0], #'Xiaomi Book Pro 14 2022 OLED'
+                                 callback_data=configs_list_callback.new(
+                                    marker = 'configs',
+                                    category_id = 1,
+                                    brand_id = 1,
+                                    model_id = 1,
+                                    showed_keyboard = 'xiaominb_keyboard'
                                   )),
-            InlineKeyboardButton(text= 'Xiaomi Book Pro 16 2022 OLED',
-                                 callback_data=navigation_items_callback.new(
-                                    for_data = 'Xiaomi_Book_Pro_16_2022_OLED'
+            InlineKeyboardButton(text= db.get_model_name(id=2)[0], #'Xiaomi Book Pro 16 2022 OLED',
+                                 callback_data=configs_list_callback.new(
+                                    marker = 'configs',
+                                    category_id = 1,
+                                    brand_id = 1,
+                                    model_id = 2,
+                                    showed_keyboard = 'xiaominb_keyboard'
                                   ))
-
         ],
         [
-            InlineKeyboardButton(text= 'Xiaomi Book Air 13',
-                                 callback_data=navigation_items_callback.new(
-                                    for_data = 'Xiaomi_Book_Air_13'
+            InlineKeyboardButton(text= db.get_model_name(id=3)[0], #'Xiaomi Book Air 13',
+                                 callback_data=configs_list_callback.new(
+                                    marker = 'configs',
+                                    category_id = 1,
+                                    brand_id = 1,
+                                    model_id = 3,
+                                    showed_keyboard = 'xiaominb_keyboard'
                                   )),
             InlineKeyboardButton(text= 'Все устройства',
-                                 callback_data=navigation_items_callback.new(
-                                    for_data = 'Все_устройства'
+                                 callback_data=configs_list_callback.new(
+                                    marker = 'all_devices',
+                                    category_id = 1,
+                                    brand_id = 1,
+                                    model_id = 1, # заглушка
+                                    showed_keyboard = ''
                                   ))
         ],
         [
