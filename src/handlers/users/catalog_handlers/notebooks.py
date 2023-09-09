@@ -1,7 +1,7 @@
 from loader import dp, bot, db
 from aiogram import types
 from aiogram.types import CallbackQuery, InputFile, InputMediaPhoto
-from keyboards import notebooks_keyboard, navigation_items_callback, configs_list_callback, xiaominb_keyboard, xiaomi_Redminb_keyboard, lenovo_Legionnb_keyboard, lenovo_Legion_2023nb_keyboard, lenovo_GeekPronb_keyboard, lenovo_nb_keyboard, huaweinb_keyboard, honornb_keyboard, asusnb_keyboard, asus_rognb_keyboard
+from keyboards import notebooks_keyboard, navigation_items_callback, configs_list_callback, xiaominb_keyboard, xiaomi_Redminb_keyboard, lenovo_Legionnb_keyboard, lenovo_Legion_2023nb_keyboard, lenovo_GeekPronb_keyboard, lenovo_nb_keyboard, huaweinb_keyboard, honornb_keyboard, asusnb_keyboard, asus_rognb_keyboard, get_configs_inline_keyboard
 from keyboards import get_item_inline_keyboard
 from pathlib import Path
 from aiogram.utils.markdown import hbold
@@ -175,7 +175,8 @@ async def Show_configs_of_model(call: types.CallbackQuery):
     brand = str(call.data.split(':')[-3])
     model = str(call.data.split(':')[-2])
     # достаю список строк из базы данных для нащей категории
-    items_in_category = db.select_items_info(category_id=category, 
+    items_in_category = db.select_items_info(table='Items',
+                                             category_id=category, 
                                              brand_id=brand, 
                                              model_id=model)
 
@@ -205,7 +206,7 @@ async def Show_configs_of_model(call: types.CallbackQuery):
     await bot.send_message(chat_id=call.message.chat.id, 
                             text=f'Выберите производителя устройства\n-----'
                                  f'\n{hbold(db.get_category_name(id=category)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand)[0])}', 
-                            reply_markup=xiaominb_keyboard #TODO: попробовать клавиатуру тоже определять исходя из колбэка
+                            reply_markup=get_configs_inline_keyboard(category_id=1, brand_id=1, model_id=1)#xiaominb_keyboard #TODO: попробовать клавиатуру тоже определять исходя из колбэка
                                 )
 
 @dp.callback_query_handler(configs_list_callback.filter(marker='all_devices'))
@@ -218,7 +219,7 @@ async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
     brand = str(call.data.split(':')[-3])
 
     # достаю список строк из базы данных для нащей категории
-    items_in_category = db.select_items_info(category_id=category, brand_id=brand)
+    items_in_category = db.select_items_info(table='Items', category_id=category, brand_id=brand)
     id_of_category=[]
 
     # сохраняю список id-ников строк с товарами, которые входят в нашу категорию 

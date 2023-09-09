@@ -12,50 +12,26 @@ storage = MemoryStorage() #кусок оперативной памяти. Пр�
 dp = Dispatcher(bot, storage=storage) # размещаем диспетчер в нашем боте (диспетчеру сказали, что он следит за этим ботом)
 db_path = Path('db_api', 'database','techshop_database.db')
 db = Database(db_path=db_path)
-try:
-    db.create_table_users()
-except sqlite3.OperationalError as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
-except Exception as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
+logger.add('logs/debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip') # прописываю в каком формате сохранять логги
 
-try:
-    db.create_table_items()
-except sqlite3.OperationalError as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
-except Exception as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
+# def test_sql_error(func) -> None:
+#     try :
+#         func()
+#     except sqlite3.OperationalError as error_info:
+#         logger.debug(error_info)
+#     except Exception as error_info:
+#         logger.debug(error_info) 
 
-try:
-    db.create_table_category()
-except sqlite3.OperationalError as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
-except Exception as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
+# funcs_for_test = (db.create_table_users(), 
+#                   db.create_table_items(), 
+#                   db.create_table_category(), 
+#                   db.create_table_brand(), 
+#                   db.create_table_model())
 
-try:
-    db.create_table_brand()
-except sqlite3.OperationalError as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
-except Exception as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
+# for func in funcs_for_test:
+#     test_sql_error(func)
 
-try:
-    db.create_table_model()
-except sqlite3.OperationalError as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
-except Exception as e:
-    logger.add('debug.log', format='{time} {level} {message}', level = "DEBUG", rotation = '10 KB', compression = 'zip')
-    logger.debug(e)
+
 
 # заполняем БД - все категории товаров
 # db.add_category(id=1, category = 'Ноутбуки')

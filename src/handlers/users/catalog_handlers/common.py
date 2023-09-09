@@ -21,13 +21,6 @@ async def back_to_catalog(call: types.CallbackQuery):
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='finished'))
 async def finished(call: types.CallbackQuery, state: FSMContext):
 
-#     for_data = call.data.split(':')[-1]
-
-#     chat_id = call.message.chat.id
-#     message_id = call.message.message_id
-#     text = f'Выберите производителя устройства\n-----'
-#     text_back = f'Выберите категорию устройств\n-----'
-
 #     await bot.delete_message(chat_id=chat_id, message_id=message_id)
     await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
 

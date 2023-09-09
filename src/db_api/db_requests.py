@@ -128,6 +128,11 @@ class Database:
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True) 
     
+    def get_model_id(self, **kwargs)-> list:
+        sql = 'SELECT id FROM Model WHERE '
+        sql, parameters = self.format_args(sql, kwargs)
+        return self.execute(sql, parameters, fetchone=True) 
+    
     def get_photo_path(self, **kwargs)-> list:
         sql = 'SELECT photo_path FROM Model WHERE '
         sql, parameters = self.format_args(sql, kwargs)
@@ -138,16 +143,16 @@ class Database:
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True) 
 
-    def select_items_info(self, **kwargs)-> list:
-        sql = 'SELECT * FROM Items WHERE '
+    def select_items_info(self, table, **kwargs)-> list:
+        sql = f'SELECT * FROM {table} WHERE '
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchall=True)    
 
-    def select_all_items(self):
-        sql = 'SELECT * FROM Items WHERE '
+    def select_all_items(self, table):
+        sql = f'SELECT * FROM {table} WHERE '
         return self.execute(sql, fetchall=True)
     
-    # def get_items_count(self, **kwargs) -> int: # возвращает общее количество всех товаров
-    #     sql = 'SELECT * FROM Items'
-    #     sql, item_parameters = self.format_args(sql, kwargs)
-    #     return len(self.execute(sql, item_parameters, kwargs, fetchall=True))
+    def get_items_count(self, table, **kwargs) -> int: # возвращает общее количество всех товаров
+        sql = f'SELECT * FROM {table} WHERE '
+        sql, item_parameters = self.format_args(sql, kwargs)
+        return len(self.execute(sql, item_parameters, kwargs, fetchall=True))
