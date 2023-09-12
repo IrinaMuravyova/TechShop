@@ -1,13 +1,14 @@
 from loader import dp, bot, db
 from aiogram import types
-from aiogram.types import CallbackQuery, InputFile, InputMediaPhoto
-from keyboards import notebooks_keyboard, navigation_items_callback, configs_list_callback, xiaominb_keyboard, xiaomi_Redminb_keyboard, lenovo_Legionnb_keyboard, lenovo_Legion_2023nb_keyboard, lenovo_GeekPronb_keyboard, lenovo_nb_keyboard, huaweinb_keyboard, honornb_keyboard, asusnb_keyboard, asus_rognb_keyboard, get_configs_inline_keyboard
-from keyboards import get_item_inline_keyboard
+from aiogram.types import InputFile
+from keyboards import navigation_items_callback, configs_list_callback
+from keyboards import get_item_inline_keyboard, get_configs_inline_keyboard, get_brands_models_inline_keyboard
 from pathlib import Path
 from aiogram.utils.markdown import hbold
-from config import photo_path_XiaomiBookPro14
 from aiogram.dispatcher import FSMContext
 
+# @dp.callback_query_handler(navigation_items_callback.filter())
+# for_data_vocab={'Xiaominb': computers_keyboard, 'notebooks': notebooks_keyboard}
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Xiaominb'))
 async def Xiaominb(call: types.CallbackQuery):
@@ -15,7 +16,7 @@ async def Xiaominb(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Xiaomi")}', 
                                     chat_id=call.message.chat.id, 
                                     message_id=call.message.message_id,
-                                    reply_markup=xiaominb_keyboard
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=1)
                                     )
    
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Xiaomi_Redmi'))
@@ -30,7 +31,7 @@ async def Xiaomi_Redmi(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Xiaomi Redmi")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=xiaomi_Redminb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#xiaomi_Redminb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_Legion'))
@@ -45,7 +46,7 @@ async def Lenovo_Legion(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo Legion")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=lenovo_Legionnb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_Legionnb_keyboard #todo
                                     )
    
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_Legion_2023'))
@@ -60,7 +61,7 @@ async def Lenovo_Legion_2023(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo Legion 2023")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=lenovo_Legion_2023nb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_Legion_2023nb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_GeekPro'))
@@ -75,7 +76,7 @@ async def Lenovo_GeekPro(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo GeekPro")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=lenovo_GeekPronb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_GeekPronb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo'))
@@ -90,7 +91,7 @@ async def Lenovo(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=lenovo_nb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_nb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='HUAWEI'))
@@ -105,7 +106,7 @@ async def HUAWEI(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » HUAWEI")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=huaweinb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#huaweinb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Honor'))
@@ -120,7 +121,7 @@ async def Honor(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Honor")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=honornb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#honornb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='ASUS'))
@@ -135,7 +136,7 @@ async def ASUS(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » ASUS")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=asusnb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#asusnb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='ASUS_ROG'))
@@ -150,24 +151,24 @@ async def ASUS_ROG(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » ASUS ROG")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=asus_rognb_keyboard #todo
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#asus_rognb_keyboard #todo
                                     )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_notebooks'))
 async def Back_to_notebooks(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
+    # for_data = call.data.split(':')[-1]
 
     chat_id = call.message.chat.id
     message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
+    # text = f'Выберите модель устройства\n-----'
     text_back = f'Выберите производителя устройства\n-----'
 
     await bot.edit_message_text(text=text_back+f'\n{hbold("Ноутбуки")}', 
                                     chat_id=chat_id, 
                                     message_id=message_id,
-                                    reply_markup=notebooks_keyboard
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#notebooks_keyboard
                                     )
-            
+#            
 @dp.callback_query_handler(configs_list_callback.filter(marker='configs'))
 async def Show_configs_of_model(call: types.CallbackQuery):
     
@@ -209,6 +210,7 @@ async def Show_configs_of_model(call: types.CallbackQuery):
                             reply_markup=get_configs_inline_keyboard(category_id=1, brand_id=1, model_id=1)#xiaominb_keyboard #TODO: попробовать клавиатуру тоже определять исходя из колбэка
                                 )
 
+# Если нажата кнопка "Все устройства"
 @dp.callback_query_handler(configs_list_callback.filter(marker='all_devices'))
 async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
 

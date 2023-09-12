@@ -1,7 +1,8 @@
 from loader import dp, db, bot
 from aiogram import types
 from aiogram.types import CallbackQuery, InputFile, InputMediaPhoto
-from keyboards import notebooks_keyboard, smartphones_keyboard, notepads_keyboard, tvs_keyboard, computers_keyboard, screens_keyboard, pstations_keyboard, vcards_keyboard, components_keyboard, accessories_keyboard, forhome_keyboard, catalog_keyboard, xiaomi_fh_keyboard, back_keyboard
+# from keyboards import notebooks_keyboard, smartphones_keyboard, notepads_keyboard, tvs_keyboard, computers_keyboard, screens_keyboard, pstations_keyboard, vcards_keyboard, components_keyboard, accessories_keyboard, forhome_keyboard, catalog_keyboard, xiaomi_fh_keyboard, back_keyboard
+from keyboards import catalog_keyboard#, back_keyboard
 from keyboards.inline.callback_data import navigation_items_callback, list_catalog_callback
 from keyboards.inline.user_keyboards.common_keyboards import get_item_inline_keyboard
 from aiogram.utils.markdown import hbold
@@ -10,13 +11,16 @@ from config import photo_path_Mijia_DC_Inverter
 from aiogram.dispatcher import FSMContext
 from states import ShowStates
 
-# возврат в основной каталог из просмотра всех товаров по кнопки "Все устройства"
+# возврат в основной каталог, в т.ч. из просмотра всех товаров по кнопки "Все устройства"
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_catalog'))
 async def back_to_catalog(call: types.CallbackQuery):
     await bot.send_message(text='Выберите категорию устройств',
                                 chat_id=call.message.chat.id,
                                 reply_markup=catalog_keyboard)
-
+    # TODO: как сделать так, чтобы не слал новое сообщение, а менял клавиатуру? - строка 56 хэндлера commands
+    # await bot.edit_message_reply_markup(chat_id=call.message.chat.id,
+    #                               message_id=call.message.id,
+    #                             reply_markup=catalog_keyboard)
     
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='finished'))
 async def finished(call: types.CallbackQuery, state: FSMContext):
@@ -55,13 +59,18 @@ async def list_catalog_left(call: types.CallbackQuery, state: FSMContext):
     current_item_id = int(call.data.split(':')[-1])
     await state.update_data({'current_id': current_item_id})
 
+    # если мы на левой границе списка, то id_right остается -1, иначе берем следующий
+    id_right = -1 if (current_item_id==all_items[-1]) or (current_item_id == -1) else all_items[all_items.index(current_item_id)+1]
+    # если мы на левой границе списка, то id_left остается -1, иначе берем предыдущий
+    id_left = -1 if (all_items[0] == current_item_id) or (id_left == -1) else all_items[all_items.index(current_item_id)-1]
+
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
         _, category_id, brand_id, model_id, parameters, prices = item_info
         photo_path=Path(*photo_path_Mijia_DC_Inverter.split('/'))
         photo = InputFile(path_or_bytesio=photo_path) 
 
-        id_left = -1 if current_item_id==all_items[0] else all_items[all_items.index(current_item_id)-1]
+        # id_left = -1 if current_item_id==all_items[0] else all_items[all_items.index(current_item_id)-1]
 
         await bot.edit_message_media(media=InputMediaPhoto(media=photo,
                                                         caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
@@ -88,6 +97,13 @@ async def list_catalog_right(call: types.CallbackQuery, state: FSMContext):
     chat_id = call.message.chat.id
     # из кнопки достаем текущий id (элемента, который показываем в канале)
     current_item_id = int(call.data.split(':')[-1])
+    id_right = -1 if current_item_id==all_items[-1] or current_item_id == -1 else all_items[all_items.index(current_item_id)+1]
+
+    # # если мы на левой границе списка, то id_right остается -1, иначе берем следующий
+    # id_right = -1 if (current_item_id==all_items[-1]) or (current_item_id == -1) else all_items[all_items.index(current_item_id)+1]
+    # # если мы на левой границе списка, то id_left остается -1, иначе берем предыдущий
+    # id_left = -1 if (all_items[0] == current_item_id) or (id_left == -1) else all_items[all_items.index(current_item_id)-1]
+
     await state.update_data({'current_id': current_item_id})
 
     if current_item_id != -1:

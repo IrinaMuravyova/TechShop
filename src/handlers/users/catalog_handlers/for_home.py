@@ -1,9 +1,10 @@
 from loader import dp, db, bot
 from aiogram import types
 from aiogram.types import CallbackQuery, InputFile, InputMediaPhoto
-from keyboards import notebooks_keyboard, smartphones_keyboard, notepads_keyboard, tvs_keyboard, computers_keyboard, screens_keyboard, pstations_keyboard, vcards_keyboard, components_keyboard, accessories_keyboard, forhome_keyboard, catalog_keyboard, xiaomi_fh_keyboard, back_keyboard
+# from keyboards import notebooks_keyboard, smartphones_keyboard, notepads_keyboard, tvs_keyboard, computers_keyboard, screens_keyboard, pstations_keyboard, vcards_keyboard, components_keyboard, accessories_keyboard, forhome_keyboard, 
+from keyboards import catalog_keyboard
 from keyboards.inline.callback_data import navigation_items_callback, list_catalog_callback
-from keyboards.inline.user_keyboards.common_keyboards import get_item_inline_keyboard
+from keyboards.inline.user_keyboards.common_keyboards import get_item_inline_keyboard, get_brands_models_inline_keyboard
 from aiogram.utils.markdown import hbold
 from pathlib import Path
 from config import photo_path_Mijia_DC_Inverter
@@ -23,7 +24,7 @@ async def xiaomi_fh(call: types.CallbackQuery, state: FSMContext):
     await bot.edit_message_text(text=f'Выберите модель устройства\n{hbold("Для дома » Xiaomi")}', 
                                 chat_id=chat_id, 
                                 message_id=message_id,
-                                reply_markup=xiaomi_fh_keyboard
+                                reply_markup=get_brands_models_inline_keyboard(category=-1)#xiaomi_fh_keyboard
                                 )
         
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='Все_устройства_fh'))
@@ -97,7 +98,7 @@ async def mijia_inventor(call: types.CallbackQuery):
     await bot.send_message(chat_id=call.message.chat.id, 
                             text=f'Выберите производителя устройства\n-----'
                                  f'\n{hbold("Для дома » Xiaomi")}', 
-                            reply_markup=xiaomi_fh_keyboard
+                            reply_markup=get_brands_models_inline_keyboard(category=-1)#xiaomi_fh_keyboard
                                 )
 
 @dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_for_home'))
@@ -123,5 +124,5 @@ async def all_devices(call: types.CallbackQuery):
     await bot.edit_message_text(text=text+f'\n{hbold("Для дома » Xiaomi")}', 
                                 chat_id=chat_id, 
                                 message_id=message_id,
-                                reply_markup=xiaomi_fh_keyboard
+                                reply_markup=get_brands_models_inline_keyboard(category=-1)#xiaomi_fh_keyboard
                                 )
