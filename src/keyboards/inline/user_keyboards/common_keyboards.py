@@ -34,53 +34,142 @@ def get_item_inline_keyboard(id_left: int, current_id: int, id_right: int) -> In
 
     return item_inline_keyboard
 
+# # динамически строится клавиатура по брендам внутри категории или по моделям внутри бренда и категории
+# def get_brands_models_inline_keyboard(category_id: int, marker: str = 'brands' ) -> InlineKeyboardMarkup:
+#     item_inline_keyboard = InlineKeyboardMarkup() # создаем пустую клавиатуру
+
+#     # достаю из БД все бренды в указанной категории
+#     brands_names_list=[]
+#     # получаю количество таких брендов, чтобы запустить цикл
+#     count_of_brands = db.get_items_count(table='Brand', id_category=category_id)+1 # TODO: почему считает неверно?
+#     brands_names_list.append(db.get_field_of_items(table='Brand', returned_field='brand', id_category=category_id))
+
+#     stop = count_of_brands-2 if count_of_brands%2!=0 else count_of_brands-1 
+    
+#     for i in range(0, stop, 2):
+#             brand = ((brands_names_list[0])[i])[0]
+#             brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=brand, id_category=category_id))[0])[0]
+#             next_brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=((brands_names_list[0])[i+1])[0], id_category=category_id))[0])[0]
+#             next_brand = ((brands_names_list[0])[i+1])[0]
+#             item_inline_keyboard.row(InlineKeyboardButton(text = brand,
+#                                                         callback_data=configs_list_callback.new(
+#                                                             marker = marker,
+#                                                             category_id = category_id,
+#                                                             brand_id = brand_id,
+#                                                             model_id = -1,
+#                                                             showed_keyboard = ''
+#                                                             )),
+#                                     InlineKeyboardButton(text = next_brand,
+#                                                             callback_data=configs_list_callback.new(
+#                                                             marker = marker,
+#                                                             category_id = category_id,
+#                                                             brand_id = next_brand_id,
+#                                                             model_id = -1,
+#                                                             showed_keyboard = ''
+#                                                             )))
+#     if (count_of_brands%2!=0):
+#             brand = ((brands_names_list[0])[count_of_brands-1])[0]
+#             brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=brand, id_category=category_id))[0])[0]
+#             item_inline_keyboard.row(InlineKeyboardButton(text = brand,
+#                                                         callback_data=configs_list_callback.new(
+#                                                             marker = marker,
+#                                                             category_id = category_id,
+#                                                             brand_id = brand_id,
+#                                                             model_id = -1,
+#                                                             showed_keyboard = ''
+#                                                             )))
+ 
+#     match category_id:
+
+#        case 1: for_data='notebooks' # category = 'Ноутбуки'
+#        case 2: for_data='smartphones' # category = 'Смартфоны'
+#        case 3: for_data='notepads' # category = 'Планшеты'
+#        case 4: for_data='tvs' # category = 'Телевизоры'
+#        case 5: for_data='computers' # category = 'Компьютеры'
+#        case 6: for_data='screens' # category = 'Мониторы'
+#        case 7: for_data='pstations' # category = 'Игровые приставки'
+#        case 8: for_data='vcards' # category = 'Видеокарты'
+#        case 9: for_data='components' # category = 'Комплектующие'
+#        case 10: for_data='accessories' # category = 'Аксессуары'
+#        case 11: for_data='forhome' # category = 'Для дома'
+
+
+          
+#     item_inline_keyboard.add(InlineKeyboardButton(text= '« Назад',
+#                                                   callback_data=configs_list_callback.new(
+#                                                      marker = 'back_to_level_up',
+#                                                      category_id = category_id,
+#                                                      brand_id = -1,
+#                                                      model_id = -1,
+#                                                      showed_keyboard = '')))
+#     return item_inline_keyboard
+
+# формируем клавиатуру, чтобы листать товар. Первоначальный фильтр - брэнд в категории
+
+
+
 # динамически строится клавиатура по брендам внутри категории или по моделям внутри бренда и категории
-def get_brands_models_inline_keyboard(category_id: int, marker: str = 'brands' ) -> InlineKeyboardMarkup:
+def get_brands_models_inline_keyboard(category_id: int, brand_id: int = -1, marker: str = 'brands' ) -> InlineKeyboardMarkup:
     item_inline_keyboard = InlineKeyboardMarkup() # создаем пустую клавиатуру
 
-    # достаю из БД все бренды в указанной категории
-    brands_names_list=[]
-    # получаю количество таких брендов, чтобы запустить цикл
-    count_of_brands = db.get_items_count(table='Brand', id_category=category_id)+1 # TODO: почему считает неверно?
-    brands_names_list.append(db.get_field_of_items(table='Brand', returned_field='brand', id_category=category_id))
-
-    stop = count_of_brands-2 if count_of_brands%2!=0 else count_of_brands-1 
+    # достаю из БД все бренды или все модели в указанной категории
+    names_list=[]
+    # если brand_id=-1, то получаю количество таких брендов, иначе кол-во моделей
+    if brand_id != -1: 
+        count_of_names = db.get_items_count(table='Model', id_brand=brand_id)+1 # TODO: почему считает неверно?
+        names_list.append(db.get_field_of_items(table='Model', returned_field='model', id_brand=brand_id))
+        print(f"count_of_names = {count_of_names}")
+        print(f"names_list = {names_list}")
+    else: 
+        count_of_names = db.get_items_count(table='Brand', id_category=category_id)+1 # TODO: почему считает неверно?
+        names_list.append(db.get_field_of_items(table='Brand', returned_field='brand', id_category=category_id))
+        print(f"names_list else = {names_list}")
+    
+    stop = count_of_names-2 if count_of_names%2!=0 else count_of_names-1 
     
     for i in range(0, stop, 2):
-            brand = ((brands_names_list[0])[i])[0]
-            brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=brand, id_category=category_id))[0])[0]
-            next_brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=((brands_names_list[0])[i+1])[0], id_category=category_id))[0])[0]
-            next_brand = ((brands_names_list[0])[i+1])[0]
-            item_inline_keyboard.row(InlineKeyboardButton(text = brand,
+            items = ((names_list[0])[i])[0]
+            if brand_id != -1:
+                 item_id = ((db.get_field_of_items(table='Model', returned_field='id', id_brand=brand_id, model=items))[0])[0]
+                 next_item_id = ((db.get_field_of_items(table='Model', returned_field='id', id_brand=brand_id, model=((names_list[0])[i+1])[0]))[0])[0]
+            else: 
+                item_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=items, id_category=category_id))[0])[0]
+                next_item_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=((names_list[0])[i+1])[0], id_category=category_id))[0])[0]
+            next_item = ((names_list[0])[i+1])[0]
+            item_inline_keyboard.row(InlineKeyboardButton(text = items,
                                                         callback_data=configs_list_callback.new(
-                                                            marker = marker,
+                                                            marker = marker,# if brand_id ==-1 else brand_id,
                                                             category_id = category_id,
-                                                            brand_id = brand_id,
-                                                            model_id = -1,
+                                                            brand_id = item_id if brand_id ==-1 else brand_id,
+                                                            model_id = -1 if brand_id !=-1 else item_id,
                                                             showed_keyboard = ''
                                                             )),
-                                    InlineKeyboardButton(text = next_brand,
+                                    InlineKeyboardButton(text = next_item,
                                                             callback_data=configs_list_callback.new(
-                                                            marker = marker,
+                                                            marker = marker,# if brand_id ==-1 else brand_id,
                                                             category_id = category_id,
-                                                            brand_id = next_brand_id,
-                                                            model_id = -1,
+                                                            brand_id = next_item_id if brand_id ==-1 else brand_id,
+                                                            model_id = -1 if brand_id !=-1 else next_item_id,
                                                             showed_keyboard = ''
                                                             )))
-    if (count_of_brands%2!=0):
-            brand = ((brands_names_list[0])[count_of_brands-1])[0]
-            brand_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=brand, id_category=category_id))[0])[0]
-            item_inline_keyboard.row(InlineKeyboardButton(text = brand,
+    if (count_of_names%2!=0):
+            print(f"names_list[0] = {names_list[0]}")
+            items = ((names_list[0])[count_of_names-1])[0]
+            if brand_id != -1:
+                 item_id = ((db.get_field_of_items(table='Model', returned_field='id', id_brand=brand_id, model=items))[0])[0]
+            else:
+                 item_id = ((db.get_field_of_items(table='Brand', returned_field='id', brand=items, id_category=category_id))[0])[0]
+            item_inline_keyboard.row(InlineKeyboardButton(text = items,
                                                         callback_data=configs_list_callback.new(
-                                                            marker = marker,
+                                                            marker = marker,# if brand_id ==-1 else brand_id,
                                                             category_id = category_id,
-                                                            brand_id = brand_id,
-                                                            model_id = -1,
+                                                            brand_id = item_id if brand_id ==-1 else brand_id,
+                                                            model_id = -1 if brand_id !=-1 else item_id,
                                                             showed_keyboard = ''
                                                             )))
  
     match category_id:
-        # case 1: for_data = 'back_to_catalog'
+
        case 1: for_data='notebooks' # category = 'Ноутбуки'
        case 2: for_data='smartphones' # category = 'Смартфоны'
        case 3: for_data='notepads' # category = 'Планшеты'
@@ -93,13 +182,12 @@ def get_brands_models_inline_keyboard(category_id: int, marker: str = 'brands' )
        case 10: for_data='accessories' # category = 'Аксессуары'
        case 11: for_data='forhome' # category = 'Для дома'
 
-
           
     item_inline_keyboard.add(InlineKeyboardButton(text= '« Назад',
                                                   callback_data=configs_list_callback.new(
                                                      marker = 'back_to_level_up',
                                                      category_id = category_id,
-                                                     brand_id = -1,
+                                                     brand_id = -1 if brand_id == -1 else item_id,
                                                      model_id = -1,
                                                      showed_keyboard = '')))
     return item_inline_keyboard
