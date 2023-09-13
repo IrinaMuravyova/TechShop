@@ -81,7 +81,7 @@ def get_brands_models_inline_keyboard(category_id: int, marker: str = 'brands' )
  
     match category_id:
         # case 1: for_data = 'back_to_catalog'
-       case 1: for_data='back_to_notebooks' # category = 'Ноутбуки'
+       case 1: for_data='notebooks' # category = 'Ноутбуки'
        case 2: for_data='smartphones' # category = 'Смартфоны'
        case 3: for_data='notepads' # category = 'Планшеты'
        case 4: for_data='tvs' # category = 'Телевизоры'
@@ -96,6 +96,10 @@ def get_brands_models_inline_keyboard(category_id: int, marker: str = 'brands' )
 
           
     item_inline_keyboard.add(InlineKeyboardButton(text= '« Назад',
-                                                  callback_data=navigation_items_callback.new(
-                                                     for_data = for_data)))
+                                                  callback_data=configs_list_callback.new(
+                                                     marker = 'back_to_level_up',
+                                                     category_id = category_id,
+                                                     brand_id = -1,
+                                                     model_id = -1,
+                                                     showed_keyboard = '')))
     return item_inline_keyboard

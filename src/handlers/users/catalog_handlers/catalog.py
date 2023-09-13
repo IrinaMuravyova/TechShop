@@ -1,7 +1,8 @@
 from loader import dp, db, bot
 from aiogram import types
-from keyboards.inline.callback_data import navigation_items_callback
+from keyboards.inline.callback_data import navigation_items_callback, configs_list_callback
 from keyboards.inline.user_keyboards.common_keyboards import get_brands_models_inline_keyboard
+from keyboards.inline import catalog_keyboard
 from aiogram.utils.markdown import hbold
 
 
@@ -19,7 +20,7 @@ async def notebooks(call: types.CallbackQuery, callback_data: dict):
        case 'components':  category_id=9 # category = 'Комплектующие'
        case 'accessories': category_id=10 # category = 'Аксессуары'
        case 'forhome':     category_id=11 # category = 'Для дома'
-        
+
 
     chat_id = call.message.chat.id
     message_id = call.message.message_id
@@ -28,4 +29,18 @@ async def notebooks(call: types.CallbackQuery, callback_data: dict):
                                     chat_id=chat_id, 
                                     message_id=message_id,
                                     reply_markup=get_brands_models_inline_keyboard(category_id=category_id)
+                                    )
+
+@dp.callback_query_handler(configs_list_callback.filter(marker='back_to_level_up'))
+async def Back_to_level_up(call: types.CallbackQuery, callback_data:dict):
+
+    if int(callback_data.get('brand_id')) == -1:
+        chat_id = call.message.chat.id
+        message_id = call.message.message_id
+        text_head = 'Выберите категорию устройств'
+        # f'Выберите производителя устройства\n-----'
+        await bot.edit_message_text(text=text_head, 
+                                    chat_id=chat_id, 
+                                    message_id=message_id,
+                                    reply_markup=catalog_keyboard
                                     )

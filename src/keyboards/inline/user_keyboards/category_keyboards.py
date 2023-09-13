@@ -23,7 +23,7 @@ buy_keyboard = InlineKeyboardMarkup(
             [
                 InlineKeyboardButton(text='Завершить', 
                                      callback_data=navigation_items_callback.new(
-                                         for_data = 'finished', 
+                                         for_data = 'finished'
                                          ))
             ]
         ]
