@@ -2,9 +2,6 @@ from loader import dp, bot
 from aiogram import types
 from aiogram.types import InputMediaVideo
 from keyboards.inline import contactus_keyboard, buy_keyboard, catalog_keyboard
-from keyboards.inline.callback_data import navigation_items_callback
-
-from pathlib import Path
 from aiogram.utils.markdown import hbold, hlink
 from config import video_path_intro
     

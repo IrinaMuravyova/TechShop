@@ -1,174 +1,12 @@
 from loader import dp, bot, db
 from aiogram import types
 from aiogram.types import InputFile
-from keyboards import navigation_items_callback, configs_list_callback
-from keyboards import get_item_inline_keyboard, get_configs_inline_keyboard, get_brands_models_inline_keyboard
+from keyboards import configs_list_callback
+from keyboards import get_item_inline_keyboard, get_configs_inline_keyboard
 from pathlib import Path
 from aiogram.utils.markdown import hbold
 from aiogram.dispatcher import FSMContext
-
-# @dp.callback_query_handler(navigation_items_callback.filter())
-# for_data_vocab={'Xiaominb': computers_keyboard, 'notebooks': notebooks_keyboard}
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Xiaominb'))
-async def Xiaominb(call: types.CallbackQuery):
-    text = f'Выберите модель устройства\n-----'
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Xiaomi")}', 
-                                    chat_id=call.message.chat.id, 
-                                    message_id=call.message.message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=1)
-                                    )
-   
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Xiaomi_Redmi'))
-async def Xiaomi_Redmi(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Xiaomi Redmi")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#xiaomi_Redminb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_Legion'))
-async def Lenovo_Legion(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo Legion")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_Legionnb_keyboard #todo
-                                    )
-   
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_Legion_2023'))
-async def Lenovo_Legion_2023(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo Legion 2023")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_Legion_2023nb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo_GeekPro'))
-async def Lenovo_GeekPro(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo GeekPro")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_GeekPronb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Lenovo'))
-async def Lenovo(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Lenovo")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#lenovo_nb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='HUAWEI'))
-async def HUAWEI(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » HUAWEI")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#huaweinb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='Honor'))
-async def Honor(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » Honor")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#honornb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='ASUS'))
-async def ASUS(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » ASUS")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#asusnb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='ASUS_ROG'))
-async def ASUS_ROG(call: types.CallbackQuery):
-    for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-    
-    await bot.edit_message_text(text=text+f'\n{hbold("Ноутбуки » ASUS ROG")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#asus_rognb_keyboard #todo
-                                    )
-
-@dp.callback_query_handler(navigation_items_callback.filter(for_data='back_to_notebooks'))
-async def Back_to_notebooks(call: types.CallbackQuery):
-    # for_data = call.data.split(':')[-1]
-
-    chat_id = call.message.chat.id
-    message_id = call.message.message_id
-    # text = f'Выберите модель устройства\n-----'
-    text_back = f'Выберите производителя устройства\n-----'
-
-    await bot.edit_message_text(text=text_back+f'\n{hbold("Ноутбуки")}', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=get_brands_models_inline_keyboard(category_id=-1)#notebooks_keyboard
-                                    )
-#            
+          
 @dp.callback_query_handler(configs_list_callback.filter(marker='configs'))
 async def Show_configs_of_model(call: types.CallbackQuery):
     
@@ -193,10 +31,6 @@ async def Show_configs_of_model(call: types.CallbackQuery):
     photo = Path(db.get_photo_path(id=str(call.data.split(':')[-2]))[0])
     photo = InputFile(path_or_bytesio=photo)
 
-    show_keyboard = call.data.split(':')[-1] #xiaominb_keyboard
-    # print(call.data.split(':')[-1])
-    # print(f'show_keyboard={show_keyboard}')
-
     await bot.send_photo(chat_id=call.message.chat.id, 
                             photo=photo,
                             caption=f'\n{hbold(db.get_category_name(id=category)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand)[0])}'
@@ -207,7 +41,7 @@ async def Show_configs_of_model(call: types.CallbackQuery):
     await bot.send_message(chat_id=call.message.chat.id, 
                             text=f'Выберите производителя устройства\n-----'
                                  f'\n{hbold(db.get_category_name(id=category)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand)[0])}', 
-                            reply_markup=get_configs_inline_keyboard(category_id=1, brand_id=1, model_id=1)#xiaominb_keyboard #TODO: попробовать клавиатуру тоже определять исходя из колбэка
+                            reply_markup=get_configs_inline_keyboard(category_id=1, brand_id=1, model_id=1)
                                 )
 
 # Если нажата кнопка "Все устройства"
@@ -242,7 +76,6 @@ async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
                             message_id=message_id)
     # если у нас в категории больше одного элемента, то id следующего элемента = id элемента с индексом 1 нашей выборки
     id_right=-1 if len(id_of_category)==1 else id_of_category[1]
-    # current_item_id = int(call.data.split(':')[-1])
     await bot.send_photo(chat_id=chat_id,
                         photo=photo,
                         caption=f'\n{hbold(db.get_category_name(id=category_id)[0])}{hbold(" » ")}{hbold(db.get_brand_name(id=brand_id)[0])}'   
@@ -251,6 +84,6 @@ async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
                                 f'\n{hbold("Характеристики и цена:")}'
                                 f'\n{parameters}'
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
-                                f'\n\n                        cтраница: {id} / {len(items_in_category)}', # TODO: исправить номер страницы
+                                f'\n\n                        cтраница: {id} / {len(items_in_category)}', 
                         reply_markup=get_item_inline_keyboard(id_left=-1, current_id=id, id_right=id_right ))
 

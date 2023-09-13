@@ -52,7 +52,7 @@ async def notebooks(call: types.CallbackQuery, callback_data: dict):
     message_id = call.message.message_id
     if brand_id == -1:
         text = f'Выберите производителя устройства\n-----\n{hbold((db.get_field_of_items(table="Category", returned_field="category", id = category_id)[0])[0])}'
-    else: text = f'Выберите производителя устройства'+'\n-----\n{hbold((db.get_field_of_items(table="Category", returned_field="category", id = category_id)[0])[0])}'+' » {hbold((db.get_field_of_items(table="Brand", returned_field="brand", id = brand_id)[0])[0])}'
+    else: text = f'Выберите производителя устройства\n-----\n{hbold((db.get_field_of_items(table="Category", returned_field="category", id = category_id)[0])[0])} » {hbold((db.get_field_of_items(table="Brand", returned_field="brand", id = brand_id)[0])[0])}'
     await bot.edit_message_text(text=text, 
                                     chat_id=chat_id, 
                                     message_id=message_id,
