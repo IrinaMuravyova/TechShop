@@ -42,10 +42,11 @@ def get_brands_models_inline_keyboard(category_id: int, brand_id: int = -1, mark
     names_list=[]
     # если brand_id=-1, то получаю количество таких брендов, иначе кол-во моделей
     if brand_id != -1: 
-        count_of_names = db.get_items_count(table='Model', id_brand=brand_id)+1 # TODO: почему считает неверно?
+        count_of_names = db.get_items_count(table='Model', id_brand=brand_id)
         names_list.append(db.get_field_of_items(table='Model', returned_field='model', id_brand=brand_id))
+        marker = 'configs'
     else: 
-        count_of_names = db.get_items_count(table='Brand', id_category=category_id)+1 # TODO: почему считает неверно?
+        count_of_names = db.get_items_count(table='Brand', id_category=category_id) 
         names_list.append(db.get_field_of_items(table='Brand', returned_field='brand', id_category=category_id))
     
     stop = count_of_names-2 if count_of_names%2!=0 else count_of_names-1 
@@ -64,7 +65,7 @@ def get_brands_models_inline_keyboard(category_id: int, brand_id: int = -1, mark
                                                             marker = marker,
                                                             category_id = category_id,
                                                             brand_id = item_id if brand_id ==-1 else brand_id,
-                                                            model_id = -1 if brand_id !=-1 else item_id,
+                                                            model_id = -1 if brand_id ==-1 else item_id,
                                                             showed_keyboard = ''
                                                             )),
                                     InlineKeyboardButton(text = next_item,
@@ -72,7 +73,7 @@ def get_brands_models_inline_keyboard(category_id: int, brand_id: int = -1, mark
                                                             marker = marker,
                                                             category_id = category_id,
                                                             brand_id = next_item_id if brand_id ==-1 else brand_id,
-                                                            model_id = -1 if brand_id !=-1 else next_item_id,
+                                                            model_id = -1 if brand_id ==-1 else next_item_id,
                                                             showed_keyboard = ''
                                                             )))
     if (count_of_names%2!=0):

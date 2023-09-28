@@ -160,7 +160,7 @@ class Database:
         return self.execute(sql, parameters, fetchall=True)    
 
     def select_all_items(self, table):
-        sql = f'SELECT * FROM {table} WHERE '
+        sql = f'SELECT * FROM {table}'
         return self.execute(sql, fetchall=True)
     
     def get_items_count(self, table, **kwargs) -> int: # возвращает общее количество всех товаров
@@ -168,7 +168,7 @@ class Database:
         sql, item_parameters = self.format_args(sql, kwargs)
         # print(f'sql={sql}')
         # print(f'parameters={item_parameters}')
-        return len(self.execute(sql, item_parameters, kwargs, fetchall=True))
+        return len(self.execute(sql, item_parameters, fetchall=True))
     
     # def get_items_count1(self, table, **kwargs) -> int: # возвращает общее количество всех товаров
     #     sql = f'SELECT * FROM {table} WHERE '

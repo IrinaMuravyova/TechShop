@@ -1,2 +1,2 @@
-from .inline import catalog_keyboard, get_item_inline_keyboard, get_configs_inline_keyboard, get_brands_models_inline_keyboard
+from .inline import get_item_inline_keyboard, get_configs_inline_keyboard, get_brands_models_inline_keyboard #catalog_keyboard, 
 from .inline.callback_data import list_catalog_callback, navigation_items_callback, configs_list_callback

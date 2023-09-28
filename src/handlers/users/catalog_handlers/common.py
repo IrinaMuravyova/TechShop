@@ -1,9 +1,9 @@
 from loader import dp, db, bot
 from aiogram import types
 from aiogram.types import InputFile, InputMediaPhoto
-from keyboards import catalog_keyboard
+from keyboards.inline import catalog_keyboard
 from keyboards.inline.callback_data import navigation_items_callback, list_catalog_callback
-from keyboards.inline.user_keyboards.common_keyboards import get_item_inline_keyboard
+from keyboards.inline.user_keyboards.common_keyboards import get_item_inline_keyboard, get_brands_models_inline_keyboard
 from aiogram.utils.markdown import hbold
 from pathlib import Path
 from config import photo_path_Mijia_DC_Inverter
@@ -54,10 +54,13 @@ async def list_catalog_left(call: types.CallbackQuery, state: FSMContext):
 
     # из кнопки достаем текущий id (элемента, который показываем в канале)
     current_item_id = int(call.data.split(':')[-1])
+    print(f"current_item_id {current_item_id}")
+    print(f"all_items[0] {all_items[0]}")
     await state.update_data({'current_id': current_item_id})
 
     # если мы на левой границе списка, то id_left остается -1, иначе берем предыдущий
-    id_left = -1 if (all_items[0] == current_item_id) or (id_left == -1) else all_items[all_items.index(current_item_id)-1]
+    id_left = -1 if (all_items[0] == current_item_id) or (current_item_id == -1) else all_items[all_items.index(current_item_id)-1]
+
 
     if current_item_id != -1:
         item_info = db.select_item_info(id=current_item_id)
@@ -155,4 +158,17 @@ async def list_catalog(call: types.CallbackQuery, state: FSMContext):
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
                                 f'\n\n                        cтраница: {current_item_id} / {len(all_items)}', 
                         reply_markup=get_item_inline_keyboard(id_left=all_items[all_items.index(current_item_id)-1],current_id=1, id_right=id_right))
-    
+
+
+# @dp.callback_query_handler(navigation_items_callback.filter(for_data='Все_устройства'))
+# async def all_devices(call: types.CallbackQuery):
+
+#     chat_id = call.message.chat.id
+#     message_id = call.message.message_id
+#     text = f'Выберите производителя устройства\n-----'
+
+#     await bot.edit_message_text(text=text+f'\n{hbold("Для дома » Xiaomi")}', 
+#                                 chat_id=chat_id, 
+#                                 message_id=message_id,
+#                                 reply_markup=get_brands_models_inline_keyboard(category=-1)
+#                                 )
