@@ -96,7 +96,7 @@ def get_brands_models_inline_keyboard(category_id: int, brand_id: int = -1, mark
                                                   callback_data=configs_list_callback.new(
                                                      marker = 'back_to_level_up',
                                                      category_id = category_id,
-                                                     brand_id = -1 if brand_id == -1 else item_id,
+                                                     brand_id = -1 if brand_id != -1 else item_id,
                                                      model_id = -1,
                                                      showed_keyboard = '')))
     return item_inline_keyboard

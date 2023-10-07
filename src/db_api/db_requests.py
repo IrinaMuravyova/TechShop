@@ -98,28 +98,13 @@ class Database:
         item_parameters = (id, category_id, brand_id, model_id, parameters, price)
         self.execute(sql, item_parameters, commit=True)
 
-    def add_category(self, id:int, category: str):
-        sql = 'INSERT INTO Category(id, category) VALUES(?,?)'
-        parameters = (id, category)
-        self.execute(sql, parameters, commit=True)
-    
-    def add_brand(self, id:int, id_category:int, brand: str):
-        sql = 'INSERT INTO Brand(id, id_category, brand) VALUES(?,?,?)'
-        parameters = (id, id_category, brand)
-        self.execute(sql, parameters, commit=True)
-
-    def add_model(self, id:int, id_brand: int, model: str, photo_path: str=''):
-        sql = 'INSERT INTO Model(id, id_brand, model, photo_path) VALUES(?,?,?,?)'
-        parameters = (id, id_brand, model, photo_path)
-        self.execute(sql, parameters, commit=True)
+    # def add_category(self, id:int, category: str):
+    #     sql = 'INSERT INTO Category(id, category) VALUES(?,?)'
+    #     parameters = (id, category)
+    #     self.execute(sql, parameters, commit=True)
     
     def get_category_name(self, **kwargs)-> list:
         sql = 'SELECT category FROM Category WHERE '
-        sql, parameters = self.format_args(sql, kwargs)
-        return self.execute(sql, parameters, fetchone=True) 
-    
-    def get_brand_name(self, **kwargs)-> list:
-        sql = 'SELECT brand FROM Brand WHERE '
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchone=True) 
     
@@ -158,19 +143,9 @@ class Database:
         sql = f'SELECT * FROM {table} WHERE '
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters, fetchall=True)    
-
-    def select_all_items(self, table):
-        sql = f'SELECT * FROM {table}'
-        return self.execute(sql, fetchall=True)
     
-    def get_items_count(self, table, **kwargs) -> int: # возвращает общее количество всех товаров
+    # возвращает общее количество всех товаров
+    def get_items_count(self, table, **kwargs) -> int: 
         sql = f'SELECT * FROM {table} WHERE '
         sql, item_parameters = self.format_args(sql, kwargs)
-        # print(f'sql={sql}')
-        # print(f'parameters={item_parameters}')
         return len(self.execute(sql, item_parameters, fetchall=True))
-    
-    # def get_items_count1(self, table, **kwargs) -> int: # возвращает общее количество всех товаров
-    #     sql = f'SELECT * FROM {table} WHERE '
-    #     sql, item_parameters = self.format_args(sql, kwargs)
-    #     return self.execute(sql, item_parameters, kwargs, fetchall=True)

@@ -1,7 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from keyboards.inline.callback_data import navigation_items_callback
 
-# from loader import db
 
 contactus_keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -93,15 +92,4 @@ catalog_keyboard = InlineKeyboardMarkup(
                                     )
             ]
         ]
-    )
-
-# back_keyboard = InlineKeyboardMarkup(
-#     inline_keyboard=[
-#         [
-#             InlineKeyboardButton(text='« Назад', callback_data=navigation_items_callback.new(#todo
-#                 for_data = 'ASUS'
-#             ))
-#         ]        
-#     ]
-# )
-
+)

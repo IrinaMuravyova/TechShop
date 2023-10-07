@@ -50,12 +50,9 @@ async def answer_buy_command(message: types.Message):
 async def answer_catalog_command(message: types.Message):
      await message.answer(text=f'⚡️ В каталоге {hbold("все цены на ноутбуки")},'
                                f'\nуказаны с учетом услуг по гравировке и установке программного обеспечения!')
-     # TODO: как сделать так, чтобы не слал новое сообщение, а менял клавиатуру?
      await message.answer(text='Выберите категорию устройств',
                           reply_markup=catalog_keyboard)
-     # await bot.send_message(chat_id=message.chat.id, # не знаю как определить chat_id
-     #                        text='Выберите категорию устройств',
-     #                      reply_markup=catalog_keyboard)
+
 
 @dp.message_handler(commands='instock')
 async def answer_instock_command(message: types.Message):

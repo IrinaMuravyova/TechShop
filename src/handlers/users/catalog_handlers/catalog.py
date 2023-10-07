@@ -9,6 +9,11 @@ from aiogram.dispatcher import FSMContext
 from pathlib import Path
 from aiogram.types import InputFile
 
+# Закрывает основной каталог из списка категорий    
+@dp.callback_query_handler(navigation_items_callback.filter(for_data='finished'))
+async def finished(call: types.CallbackQuery):
+    await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
+
 # вызывает построение клавиатуры с категориями
 @dp.callback_query_handler(navigation_items_callback.filter())
 async def notebooks(call: types.CallbackQuery, callback_data: dict):
@@ -38,12 +43,10 @@ async def notebooks(call: types.CallbackQuery, callback_data: dict):
 
 # определяет сообщение для брендов и вызывает динамическую клавиатуру
 @dp.callback_query_handler(configs_list_callback.filter(marker='brands'))
-async def notebooks(call: types.CallbackQuery, callback_data: dict):
+async def building_of_catalog(call: types.CallbackQuery, callback_data: dict):
 
     category_id = callback_data.get('category_id')
     brand_id = callback_data.get('brand_id')
-    # model_id = callback_data.get('model_id')
-    # print(f"model_id {model_id}")
     chat_id = call.message.chat.id
     message_id = call.message.message_id
     production_of_devices = (db.get_field_of_items(table="Category", returned_field="category", id = category_id)[0])[0]
@@ -51,7 +54,6 @@ async def notebooks(call: types.CallbackQuery, callback_data: dict):
         text = f'Выберите производителя устройства\n-----\n{hbold(production_of_devices)}'
     else: 
         text = f'Выберите производителя устройства\n-----\n{hbold(production_of_devices)} » {hbold((db.get_field_of_items(table="Brand", returned_field="brand", id = brand_id)[0])[0])}'
-        # print(f"model_id {model_id}")
     await bot.edit_message_text(text=text, 
                                     chat_id=chat_id, 
                                     message_id=message_id,
@@ -65,13 +67,11 @@ async def Show_configs_of_model(call: types.CallbackQuery):
     category = str(call.data.split(':')[-4])
     brand = str(call.data.split(':')[-3])
     model = str(call.data.split(':')[-2])
-    print(f'category {category} brand {brand} model {model}')
     # достаю список строк из базы данных для нащей категории
     items_in_category = db.select_items_info(table='Items',
                                              category_id=category, 
                                              brand_id=brand, 
                                              model_id=model)
-    print(f"items_in_category {items_in_category}")
 
     config_of_model=''
     # сохраняю список id-ников строк с товарами, которые входят в нашу категорию 
@@ -98,19 +98,6 @@ async def Show_configs_of_model(call: types.CallbackQuery):
                             reply_markup=get_configs_inline_keyboard(category_id=1, brand_id=1, model_id=1)
                                 )
 
-# ?
-@dp.callback_query_handler(configs_list_callback.filter(marker='back_to_level_up'))
-async def Back_to_level_up(call: types.CallbackQuery, callback_data:dict):
-
-    if int(callback_data.get('brand_id')) == -1:
-        chat_id = call.message.chat.id
-        message_id = call.message.message_id
-        await bot.edit_message_text(text='Выберите категорию устройств', 
-                                    chat_id=chat_id, 
-                                    message_id=message_id,
-                                    reply_markup=catalog_keyboard
-                                    )
-        
 # Если нажата кнопка "Все устройства"
 @dp.callback_query_handler(configs_list_callback.filter(marker='all_devices'))
 async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
@@ -153,3 +140,29 @@ async def show_all_devices(call: types.CallbackQuery, state: FSMContext):
                                 f'\n\n{hbold("цена: ")}{hbold(prices)}{hbold(" руб.")}'
                                 f'\n\n                        cтраница: {id} / {len(items_in_category)}', 
                         reply_markup=get_item_inline_keyboard(id_left=-1, current_id=id, id_right=id_right ))
+    
+@dp.callback_query_handler(configs_list_callback.filter(marker='back_to_level_up'))
+async def back_to_level_up(call: types.CallbackQuery, callback_data: dict):
+    category_id = callback_data.get('category_id')
+    brand_id = callback_data.get('brand_id')
+    model_id = callback_data.get('model_id')
+
+    chat_id = call.message.chat.id
+    message_id = call.message.message_id
+
+    production_of_devices = (db.get_field_of_items(table="Category", returned_field="category", id = category_id)[0])[0]
+
+    if int(model_id) != -1:
+        text = f'Выберите производителя устройства\n-----\n{hbold(production_of_devices)}'
+        await bot.edit_message_text(text=text, 
+                                    chat_id=chat_id, 
+                                    message_id=message_id,
+                                    reply_markup=get_brands_models_inline_keyboard(category_id=category_id, brand_id=brand_id)
+                                    )
+    elif int(brand_id) != -1:
+        text = f'Выберите категорию устройств'
+        await bot.edit_message_text(text=text, 
+                                    chat_id=chat_id, 
+                                    message_id=message_id,
+                                    reply_markup=catalog_keyboard
+                                    )
